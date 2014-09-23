@@ -46,6 +46,7 @@ class PhraseController extends BaseController
     public function getIndex()
     {
         $phrases = $this->getFileDetails();
+
         return View::make('phrase')->withPhrase($phrases);
     }
 
@@ -56,7 +57,8 @@ class PhraseController extends BaseController
      */
     protected function getFileDetails()
     {
-        $html = file_get_contents($this->fileUrl);
+        $html = file_get_contents($this->fileUrl); //Old Way
+        //$html = Response::get($this->fileUrl);
 
         return $this->calulateString(strip_tags($html));
     }
@@ -77,7 +79,6 @@ class PhraseController extends BaseController
         foreach ($source as $w)
         {
             if (strlen($w) >= $this->chars && !preg_match("/\A\d+\Z/", $i) && !preg_match("/\A(\w)\1+\Z/", $i) && !in_array($w, $ignore)) {
-
                 $words[] = $w;
             }
         }
@@ -110,6 +111,7 @@ class PhraseController extends BaseController
             }
             set_time_limit(1);
         }
+
         arsort($phrase);
 
         return $phrase;
